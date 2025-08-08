@@ -1,272 +1,254 @@
-# Rental System
+# 🏠 Rental System
 
-A full-stack rental property management system built with React, Node.js, Express, and MongoDB.
+A modern, full-stack rental property management system built with React, Node.js, and MongoDB. Perfect for property owners, renters, and real estate businesses.
 
-## 🚀 Technologies
+![Rental System](https://img.shields.io/badge/React-18.2.0-blue?style=for-the-badge&logo=react)
+![Node.js](https://img.shields.io/badge/Node.js-18+-green?style=for-the-badge&logo=node.js)
+![MongoDB](https://img.shields.io/badge/MongoDB-8.0+-green?style=for-the-badge&logo=mongodb)
+![Express](https://img.shields.io/badge/Express-4.18.2-black?style=for-the-badge&logo=express)
 
-- **Frontend**: React, Axios, React Router, Tailwind CSS
-- **Backend**: Node.js, Express, MongoDB, Mongoose
-- **Auth**: JWT, bcrypt
-- **Database**: MongoDB Atlas or local MongoDB
+## ✨ Features
+
+### 🏘️ Property Management
+- **Property Listings** - Create and manage rental properties with detailed information
+- **Image Storage** - MongoDB-based image storage with Base64 encoding
+- **Property Types** - Support for apartments, houses, condos, townhouses, and studios
+- **Search & Filter** - Find properties by location, price, and amenities
+
+### 👥 User Management
+- **User Authentication** - Secure JWT-based authentication system
+- **User Profiles** - Manage personal information and preferences
+- **Role-based Access** - Different permissions for hosts and guests
+
+### 📅 Booking System
+- **Property Booking** - Easy booking process with date selection
+- **Booking Management** - View, cancel, and manage bookings
+- **Booking History** - Track past and upcoming bookings
+- **Status Tracking** - Real-time booking status updates
+
+### 🎨 Modern UI/UX
+- **Responsive Design** - Works perfectly on desktop, tablet, and mobile
+- **Tailwind CSS** - Modern, utility-first CSS framework
+- **Smooth Animations** - Enhanced user experience with animations
+- **Intuitive Navigation** - Easy-to-use interface
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- **Node.js** (v18 or higher)
+- **MongoDB** (v6 or higher)
+- **npm** or **yarn**
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/rental-system.git
+   cd rental-system
+   ```
+
+2. **Install all dependencies** (Backend, Frontend, and Root)
+   ```bash
+   npm run install-all
+   ```
+   
+   *This command installs dependencies for the root project, backend, and frontend automatically.*
+
+3. **Set up environment variables**
+   
+   Create a `.env` file in the `backend` directory:
+   ```env
+   MONGODB_URI=mongodb://localhost:27017/rental-system
+   JWT_SECRET=your-super-secret-jwt-key
+   PORT=5000
+   NODE_ENV=development
+   ```
+
+4. **Start the development servers**
+   ```bash
+   npm run dev
+   ```
+   
+   *This starts both the backend (port 5000) and frontend (port 3000) servers simultaneously.*
+
+5. **Open your browser**
+   
+   Navigate to `http://localhost:3000` to access the application.
 
 ## 📁 Project Structure
 
 ```
 rental-system/
-├── backend/
-│   ├── controllers/
-│   ├── models/
-│   │   ├── User.js
-│   │   └── Rental.js
-│   ├── routes/
-│   │   ├── index.js
-│   │   ├── auth.js
-│   │   └── rentals.js
-│   ├── middleware/
-│   │   └── auth.js
-│   ├── config/
-│   │   └── database.js
-│   ├── .env
-│   ├── app.js
-│   └── server.js
-├── frontend/
-│   ├── public/
+├── backend/                 # Node.js/Express backend
+│   ├── config/             # Database configuration
+│   ├── controllers/        # Route controllers
+│   ├── middleware/         # Custom middleware
+│   ├── models/            # Mongoose models
+│   ├── routes/            # API routes
+│   ├── uploads/           # Legacy image storage
+│   ├── app.js             # Express app configuration
+│   └── server.js          # Server entry point
+├── frontend/              # React frontend
+│   ├── public/            # Static assets
 │   ├── src/
-│   │   ├── components/
-│   │   │   ├── Navbar.jsx
-│   │   │   └── PrivateRoute.jsx
-│   │   ├── pages/
-│   │   │   ├── Home.jsx
-│   │   │   ├── Login.jsx
-│   │   │   ├── Register.jsx
-│   │   │   ├── RentalList.jsx
-│   │   │   ├── RentalDetail.jsx
-│   │   │   ├── CreateRental.jsx
-│   │   │   └── Profile.jsx
-│   │   ├── services/
-│   │   │   └── api.js
-│   │   ├── context/
-│   │   │   └── AuthContext.jsx
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── index.html
+│   │   ├── components/    # Reusable components
+│   │   ├── context/       # React context providers
+│   │   ├── pages/         # Page components
+│   │   ├── services/      # API services
+│   │   └── main.jsx       # App entry point
 │   └── package.json
-├── .gitignore
-├── README.md
-└── package.json
+├── package.json           # Root package.json
+└── README.md
 ```
 
-## 🛠️ Installation & Setup
+## 🛠️ Available Scripts
 
-### Prerequisites
+### Root Directory
+- `npm run dev` - Start both backend and frontend in development mode
+- `npm run server` - Start only the backend server
+- `npm run client` - Start only the frontend development server
+- `npm run install-all` - Install dependencies for all packages
+- `npm run build` - Build the frontend for production
 
-1. **Node.js** (v14 or higher)
-2. **MongoDB** (local installation or MongoDB Atlas account)
-3. **Git**
+### Backend Directory
+- `npm run dev` - Start backend with nodemon (auto-restart on changes)
+- `npm start` - Start backend in production mode
 
-### Step 1: Clone and Install Dependencies
+### Frontend Directory
+- `npm run dev` - Start Vite development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
 
-```bash
-# Clone the repository
-git clone <repository-url>
-cd rental-system
+## 🔧 Configuration
 
-# Install all dependencies (root, backend, and frontend)
-npm run install-all
+### Environment Variables
+
+Create a `.env` file in the `backend` directory:
+
+```env
+# Database
+MONGODB_URI=mongodb://localhost:27017/rental-system
+
+# JWT
+JWT_SECRET=your-super-secret-jwt-key-here
+
+# Server
+PORT=5000
+NODE_ENV=development
+
+# Optional: External API URLs
+VITE_API_URL=http://localhost:5000/api
 ```
 
-### Step 2: Database Setup
+### MongoDB Setup
 
-#### Option A: Local MongoDB
+1. **Install MongoDB** (if not already installed)
+   - [MongoDB Installation Guide](https://docs.mongodb.com/manual/installation/)
 
-1. **Install MongoDB Community Edition**
-   - Download from: https://www.mongodb.com/try/download/community
-   - Follow installation instructions for your OS
-
-2. **Start MongoDB Service**
+2. **Start MongoDB service**
    ```bash
-   # Windows (if installed as service)
+   # Windows
    net start MongoDB
    
-   # macOS (using Homebrew)
-   brew services start mongodb-community
-   
-   # Linux
+   # macOS/Linux
    sudo systemctl start mongod
    ```
 
-#### Option B: MongoDB Atlas (Recommended for beginners)
-
-1. **Create MongoDB Atlas Account**
-   - Go to: https://www.mongodb.com/atlas
-   - Sign up for a free account
-
-2. **Create a Cluster**
-   - Click "Build a Database"
-   - Choose "FREE" tier
-   - Select your preferred provider and region
-   - Click "Create"
-
-3. **Get Connection String**
-   - Click "Connect" on your cluster
-   - Choose "Connect your application"
-   - Copy the connection string
-
-### Step 3: Environment Configuration
-
-1. **Backend Environment**
+3. **Create database** (optional - will be created automatically)
    ```bash
-   cd backend
-   cp .env.example .env
+   mongo
+   use rental-system
    ```
 
-2. **Edit the `.env` file**
-   ```env
-   # For local MongoDB
-   MONGODB_URI=mongodb://localhost:27017/rental-system
-   
-   # For MongoDB Atlas (replace with your connection string)
-   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/rental-system?retryWrites=true&w=majority
-   
-   # Server Configuration
-   PORT=5000
-   NODE_ENV=development
-   
-   # JWT Secret (change this to a secure random string)
-   JWT_SECRET=your_super_secret_jwt_key_here
-   
-   # CORS Configuration
-   CORS_ORIGIN=http://localhost:3000
-   ```
+## 🎯 Key Features Explained
 
-### Step 4: Start the Application
+### Image Storage System
+- **MongoDB Storage**: Images are stored as Base64 strings directly in MongoDB
+- **Legacy Support**: Existing images continue to work from the uploads folder
+- **Automatic Conversion**: New uploads are automatically converted to Base64
+- **Efficient Serving**: Images are served via dedicated API endpoints
 
-```bash
-# Start both frontend and backend (recommended)
-npm run dev
+### Authentication System
+- **JWT Tokens**: Secure token-based authentication
+- **Password Hashing**: Bcrypt encryption for password security
+- **Token Verification**: Automatic token validation on protected routes
+- **Session Management**: Persistent login sessions
 
-# Or start them separately
-npm run server  # Backend only (port 5000)
-npm run client  # Frontend only (port 3000)
-```
-
-## 🔧 Available Scripts
-
-- `npm run dev` - Start both frontend and backend in development mode
-- `npm run server` - Start only the backend server
-- `npm run client` - Start only the frontend development server
-- `npm run build` - Build the frontend for production
-- `npm run install-all` - Install dependencies for all packages
-
-## 📝 Features
-
-- ✅ User authentication (register/login)
-- ✅ JWT-based authorization
-- ✅ CRUD operations for rental properties
-- ✅ Responsive design with Tailwind CSS
-- ✅ Protected routes
-- ✅ Modern React with hooks and context
-- ✅ Real-time form validation
-- ✅ Image upload support
-- ✅ User profile management
-
-## 🔐 Environment Variables
-
-### Backend (.env)
-- `MONGODB_URI` - MongoDB connection string
-- `PORT` - Server port (default: 5000)
-- `JWT_SECRET` - Secret key for JWT tokens
-- `NODE_ENV` - Environment (development/production)
-- `CORS_ORIGIN` - Allowed CORS origin
+### Booking System
+- **Date Validation**: Prevents double bookings and invalid dates
+- **Pricing Calculation**: Automatic calculation of total costs
+- **Status Management**: Track booking status (pending, confirmed, active, completed, cancelled)
+- **Guest Management**: Support for multiple guests and special requests
 
 ## 🚀 Deployment
 
-### Backend Deployment
-1. **Heroku**
+### Production Build
+
+1. **Build the frontend**
    ```bash
-   # Install Heroku CLI
-   heroku create your-app-name
-   heroku config:set MONGODB_URI=your_mongodb_atlas_uri
-   heroku config:set JWT_SECRET=your_jwt_secret
-   git push heroku main
+   npm run build
    ```
 
-2. **Railway**
-   - Connect your GitHub repository
-   - Set environment variables
-   - Deploy automatically
+2. **Set production environment variables**
+   ```env
+   NODE_ENV=production
+   MONGODB_URI=your-production-mongodb-uri
+   JWT_SECRET=your-production-jwt-secret
+   ```
 
-### Frontend Deployment
-1. **Vercel**
+3. **Start the production server**
    ```bash
-   npm install -g vercel
-   vercel
+   npm start
    ```
 
-2. **Netlify**
-   - Connect your GitHub repository
-   - Build command: `npm run build`
-   - Publish directory: `dist`
+### Docker Deployment (Optional)
 
-## 🐛 Troubleshooting
+```dockerfile
+# Dockerfile
+FROM node:18-alpine
 
-### Common Issues
+WORKDIR /app
 
-1. **MongoDB Connection Failed**
-   ```
-   Error: connect ECONNREFUSED ::1:27017
-   ```
-   **Solution**: 
-   - Make sure MongoDB is running locally
-   - Or use MongoDB Atlas (recommended)
-   - Check your connection string in `.env`
+COPY package*.json ./
+RUN npm run install-all
 
-2. **Port Already in Use**
-   ```
-   Error: listen EADDRINUSE :::5000
-   ```
-   **Solution**:
-   - Change PORT in `.env` file
-   - Or kill the process using the port
+COPY . .
 
-3. **Frontend Build Errors**
-   ```
-   Error: Cannot resolve module
-   ```
-   **Solution**:
-   - Run `npm install` in frontend directory
-   - Clear node_modules and reinstall
+EXPOSE 5000
 
-4. **CORS Errors**
-   ```
-   Error: Access to fetch at 'http://localhost:5000/api' from origin 'http://localhost:3000' has been blocked by CORS policy
-   ```
-   **Solution**:
-   - Check CORS_ORIGIN in backend `.env`
-   - Make sure frontend is running on port 3000
-
-### Getting Help
-
-1. Check the console for error messages
-2. Verify all environment variables are set
-3. Ensure MongoDB is running and accessible
-4. Check if all dependencies are installed
-
-## 📄 License
-
-This project is licensed under the MIT License.
+CMD ["npm", "start"]
+```
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## 📞 Support
+## 📝 License
 
-If you encounter any issues:
-1. Check the troubleshooting section above
-2. Search existing issues
-3. Create a new issue with detailed information
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+If you encounter any issues or have questions:
+
+1. Check the [Issues](https://github.com/yourusername/rental-system/issues) page
+2. Create a new issue with detailed information
+3. Contact the development team
+
+## 🙏 Acknowledgments
+
+- **React** - Frontend framework
+- **Node.js** - Backend runtime
+- **Express** - Web framework
+- **MongoDB** - Database
+- **Tailwind CSS** - Styling framework
+- **Vite** - Build tool
+
+---
+
+**Made with ❤️ by the Rental System Team**
