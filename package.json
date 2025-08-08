@@ -1,0 +1,29 @@
+{
+  "name": "rental-system",
+  "version": "1.0.0",
+  "description": "A full-stack rental property management system",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm run dev",
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "build": "cd frontend && npm run build"
+  },
+  "keywords": [
+    "rental",
+    "property",
+    "management",
+    "react",
+    "node",
+    "mongodb"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "multer": "^2.0.2"
+  }
+}
