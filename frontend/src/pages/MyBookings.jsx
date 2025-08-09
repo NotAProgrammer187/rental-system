@@ -81,9 +81,13 @@ const MyBookings = () => {
     const now = new Date();
     switch (activeTab) {
       case 'upcoming':
+        // Only confirmed future stays
         return bookings.filter(booking => 
-          (booking.status === 'confirmed' || booking.status === 'pending') && new Date(booking.checkIn) > now
+          booking.status === 'confirmed' && new Date(booking.checkIn) > now
         );
+      case 'pending':
+        // Show all pending (typically future)
+        return bookings.filter(booking => booking.status === 'pending');
       case 'active':
         return bookings.filter(booking => 
           booking.status === 'active' || 
@@ -174,7 +178,10 @@ const MyBookings = () => {
           <div className="flex flex-wrap gap-2">
             {[
               { id: 'upcoming', label: 'Upcoming', count: bookings.filter(booking => 
-                (booking.status === 'confirmed' || booking.status === 'pending') && new Date(booking.checkIn) > new Date()
+                booking.status === 'confirmed' && new Date(booking.checkIn) > new Date()
+              ).length },
+              { id: 'pending', label: 'Pending', count: bookings.filter(booking => 
+                booking.status === 'pending'
               ).length },
               { id: 'active', label: 'Active', count: bookings.filter(booking => 
                 booking.status === 'active' || 
@@ -214,6 +221,7 @@ const MyBookings = () => {
             <h3 className="text-lg font-medium text-gray-900 mb-2">No {activeTab} bookings</h3>
             <p className="text-gray-600 mb-6">
               {activeTab === 'upcoming' && "You don't have any upcoming bookings."}
+              {activeTab === 'pending' && "You don't have any pending bookings."}
               {activeTab === 'active' && "You don't have any active bookings."}
               {activeTab === 'past' && "You don't have any past bookings."}
               {activeTab === 'cancelled' && "You don't have any cancelled bookings."}

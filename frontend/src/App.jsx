@@ -15,6 +15,8 @@ const CreateRental = lazy(() => import('./pages/CreateRental'));
 const Profile = lazy(() => import('./pages/Profile'));
 const MyBookings = lazy(() => import('./pages/MyBookings'));
 const BookingDetail = lazy(() => import('./pages/BookingDetail'));
+const BookingPage = lazy(() => import('./pages/BookingPage'));
+const CalendarDemo = lazy(() => import('./pages/CalendarDemo'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -52,6 +54,14 @@ function App() {
                 <Route path="/rentals" element={<RentalList />} />
                 <Route path="/rentals/:id" element={<RentalDetail />} />
                 <Route 
+                  path="/booking/:id" 
+                  element={
+                    <PrivateRoute>
+                      <BookingPage />
+                    </PrivateRoute>
+                  } 
+                />
+                <Route 
                   path="/create-rental" 
                   element={
                     <PrivateRoute>
@@ -83,6 +93,7 @@ function App() {
                     </PrivateRoute>
                   } 
                 />
+                <Route path="/calendar-demo" element={<CalendarDemo />} />
               </Routes>
             </Suspense>
           </main>

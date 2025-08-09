@@ -36,3 +36,4 @@ const ImageDebug = ({ imagePath, alt, className, ...props }) => {
 };
 
 export default ImageDebug;
+

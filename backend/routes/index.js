@@ -5,11 +5,13 @@ const router = express.Router();
 const authRoutes = require('./auth');
 const rentalRoutes = require('./rentals');
 const bookingRoutes = require('./bookings');
+const paymentRoutes = require('./payments');
 
 // Use routes
 router.use('/auth', authRoutes);
 router.use('/rentals', rentalRoutes);
 router.use('/bookings', bookingRoutes);
+router.use('/payments', paymentRoutes);
 
 // Health check route
 router.get('/health', (req, res) => {

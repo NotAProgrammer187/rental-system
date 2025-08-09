@@ -43,8 +43,8 @@ export const getImageUrl = (imageData, rentalId, imageIndex) => {
   
   // If it's just a filename, construct the full URL (legacy support)
   if (typeof imageData === 'string') {
-    const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    const baseURL = isDevelopment ? 'http://localhost:5000' : window.location.origin;
+  const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  const baseURL = isDevelopment ? 'http://localhost:5000' : window.location.origin;
     return `${baseURL}/uploads/${imageData}`;
   }
   

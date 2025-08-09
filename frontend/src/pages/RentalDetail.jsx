@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import api, { getImageUrl } from '../services/api';
-import BookingForm from '../components/BookingForm';
+
 
 const RentalDetail = () => {
   const { id } = useParams();
@@ -14,7 +14,8 @@ const RentalDetail = () => {
   const [error, setError] = useState('');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showImageModal, setShowImageModal] = useState(false);
-  const [showBookingForm, setShowBookingForm] = useState(false);
+
+  const [disabledDates, setDisabledDates] = useState([]);
 
   useEffect(() => {
     const fetchRental = async () => {
@@ -29,7 +30,19 @@ const RentalDetail = () => {
       }
     };
 
+    const fetchDisabledDates = async () => {
+      try {
+        const resp = await api.get(`/bookings/rental/${id}/paid-dates`);
+        if (resp.data && resp.data.success) {
+          setDisabledDates(resp.data.dates || []);
+        }
+      } catch (e) {
+        console.warn('Failed to load blocked dates:', e);
+      }
+    };
+
     fetchRental();
+    fetchDisabledDates();
   }, [id]);
 
   const handleDelete = async () => {
@@ -46,22 +59,13 @@ const RentalDetail = () => {
 
   const handleBookNow = () => {
     if (!user) {
-      navigate('/login');
+      navigate('/login', { state: { from: `/booking/${id}` } });
       return;
     }
-    setShowBookingForm(true);
+    navigate(`/booking/${id}`);
   };
 
-  const handleBookingSuccess = (booking) => {
-    setShowBookingForm(false);
-    // Show success message or redirect to booking details
-    alert(`Booking created successfully! Booking ID: ${booking._id}`);
-    navigate(`/bookings/${booking._id}`);
-  };
 
-  const handleCloseBookingForm = () => {
-    setShowBookingForm(false);
-  };
 
   if (loading) {
     return (
@@ -354,13 +358,7 @@ const RentalDetail = () => {
         </div>
       )}
 
-      {showBookingForm && rental && user && (
-        <BookingForm
-          rental={rental}
-          onSuccess={handleBookingSuccess}
-          onClose={handleCloseBookingForm}
-        />
-      )}
+
     </div>
   );
 };

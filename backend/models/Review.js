@@ -143,3 +143,5 @@ reviewSchema.statics.canReview = async function(bookingId, userId) {
 };
 
 module.exports = mongoose.model('Review', reviewSchema);
+
+

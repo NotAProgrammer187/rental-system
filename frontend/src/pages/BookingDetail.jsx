@@ -279,14 +279,6 @@ const BookingDetail = () => {
                     <span>Base Price ({calculateNights(booking.checkIn, booking.checkOut)} nights)</span>
                     <span>${booking.pricing?.basePrice?.toLocaleString() || '0'}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Cleaning Fee</span>
-                    <span>${booking.pricing?.cleaningFee?.toLocaleString() || '0'}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Service Fee</span>
-                    <span>${booking.pricing?.serviceFee?.toLocaleString() || '0'}</span>
-                  </div>
                   <div className="border-t border-gray-200 pt-3">
                     <div className="flex justify-between font-semibold text-lg">
                       <span>Total</span>

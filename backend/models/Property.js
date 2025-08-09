@@ -275,3 +275,5 @@ propertySchema.methods.isAvailableForDates = async function(startDate, endDate) 
 };
 
 module.exports = mongoose.model('Property', propertySchema);
+
+

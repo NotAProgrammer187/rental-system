@@ -6,6 +6,7 @@ A modern, full-stack rental property management system built with React, Node.js
 ![Node.js](https://img.shields.io/badge/Node.js-18+-green?style=for-the-badge&logo=node.js)
 ![MongoDB](https://img.shields.io/badge/MongoDB-8.0+-green?style=for-the-badge&logo=mongodb)
 ![Express](https://img.shields.io/badge/Express-4.18.2-black?style=for-the-badge&logo=express)
+![Stripe](https://img.shields.io/badge/Stripe-Payments-blue?style=for-the-badge&logo=stripe)
 
 ## ✨ Features
 
@@ -26,6 +27,13 @@ A modern, full-stack rental property management system built with React, Node.js
 - **Booking History** - Track past and upcoming bookings
 - **Status Tracking** - Real-time booking status updates
 
+### 💳 Payment Integration
+- **Stripe Payments** - Secure payment processing with Stripe
+- **Payment Status Tracking** - Real-time payment status (pending, completed, failed)
+- **Refund Processing** - Automatic refund processing for cancelled bookings
+- **Payment History** - Complete payment history in user profile
+- **Multiple Payment Methods** - Support for cards and other payment methods
+
 ### 🎨 Modern UI/UX
 - **Responsive Design** - Works perfectly on desktop, tablet, and mobile
 - **Tailwind CSS** - Modern, utility-first CSS framework
@@ -39,6 +47,7 @@ A modern, full-stack rental property management system built with React, Node.js
 - **Node.js** (v18 or higher)
 - **MongoDB** (v6 or higher)
 - **npm** or **yarn**
+- **Stripe Account** (for payment processing)
 
 ### Installation
 
@@ -63,6 +72,19 @@ A modern, full-stack rental property management system built with React, Node.js
    JWT_SECRET=your-super-secret-jwt-key
    PORT=5000
    NODE_ENV=development
+   
+   # Stripe Configuration
+   STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key_here
+   STRIPE_WEBHOOK_SECRET=whsec_your_stripe_webhook_secret_here
+   ```
+
+   Create a `.env` file in the `frontend` directory:
+   ```env
+   # API Configuration
+   VITE_API_URL=http://localhost:5000/api
+   
+   # Stripe Configuration
+   VITE_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key_here
    ```
 
 4. **Start the development servers**
@@ -76,6 +98,37 @@ A modern, full-stack rental property management system built with React, Node.js
    
    Navigate to `http://localhost:3000` to access the application.
 
+## 🔧 Payment Integration Setup
+
+### Stripe Configuration
+
+1. **Create a Stripe Account**
+   - Sign up at [stripe.com](https://stripe.com)
+   - Get your API keys from the Stripe Dashboard
+
+2. **Configure Environment Variables**
+   - Add your Stripe secret key to `backend/.env`
+   - Add your Stripe publishable key to `frontend/.env`
+
+3. **Set up Webhooks** (Optional for production)
+   - In Stripe Dashboard, go to Developers > Webhooks
+   - Add endpoint: `https://yourdomain.com/api/payments/webhook`
+   - Select events: `payment_intent.succeeded`, `payment_intent.payment_failed`, `charge.refunded`
+
+4. **Test Payments**
+   - Use Stripe test cards for testing
+   - Test card: `4242 4242 4242 4242`
+   - Expiry: Any future date
+   - CVC: Any 3 digits
+
+### Payment Features
+
+- **Secure Payment Processing** - All payments processed through Stripe
+- **Payment Status Tracking** - Real-time updates on payment status
+- **Automatic Refunds** - Refunds processed automatically when bookings are cancelled
+- **Payment History** - Complete payment history in user profile
+- **Multiple Payment Methods** - Support for various payment methods
+
 ## 📁 Project Structure
 
 ```
@@ -85,7 +138,17 @@ rental-system/
 │   ├── controllers/        # Route controllers
 │   ├── middleware/         # Custom middleware
 │   ├── models/            # Mongoose models
+│   │   ├── Payment.js     # Payment model
+│   │   ├── Booking.js     # Booking model
+│   │   ├── Rental.js      # Rental model
+│   │   └── User.js        # User model
 │   ├── routes/            # API routes
+│   │   ├── payments.js    # Payment routes
+│   │   ├── bookings.js    # Booking routes
+│   │   ├── rentals.js     # Rental routes
+│   │   └── auth.js        # Authentication routes
+│   ├── services/          # Business logic
+│   │   └── stripeService.js # Stripe payment service
 │   ├── uploads/           # Legacy image storage
 │   ├── app.js             # Express app configuration
 │   └── server.js          # Server entry point
@@ -93,6 +156,9 @@ rental-system/
 │   ├── public/            # Static assets
 │   ├── src/
 │   │   ├── components/    # Reusable components
+│   │   │   ├── PaymentForm.jsx    # Stripe payment form
+│   │   │   ├── PaymentHistory.jsx # Payment history component
+│   │   │   └── BookingForm.jsx    # Booking form with payment
 │   │   ├── context/       # React context providers
 │   │   ├── pages/         # Page components
 │   │   ├── services/      # API services
@@ -137,8 +203,22 @@ JWT_SECRET=your-super-secret-jwt-key-here
 PORT=5000
 NODE_ENV=development
 
+# Stripe Configuration
+STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key_here
+STRIPE_WEBHOOK_SECRET=whsec_your_stripe_webhook_secret_here
+
 # Optional: External API URLs
 VITE_API_URL=http://localhost:5000/api
+```
+
+Create a `.env` file in the `frontend` directory:
+
+```env
+# API Configuration
+VITE_API_URL=http://localhost:5000/api
+
+# Stripe Configuration
+VITE_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key_here
 ```
 
 ### MongoDB Setup
@@ -181,6 +261,13 @@ VITE_API_URL=http://localhost:5000/api
 - **Status Management**: Track booking status (pending, confirmed, active, completed, cancelled)
 - **Guest Management**: Support for multiple guests and special requests
 
+### Payment System
+- **Stripe Integration**: Secure payment processing with Stripe
+- **Payment Intents**: Modern payment flow with payment intents
+- **Webhook Support**: Real-time payment status updates
+- **Refund Processing**: Automatic refunds for cancelled bookings
+- **Payment History**: Complete payment tracking and history
+
 ## 🚀 Deployment
 
 ### Production Build
@@ -195,6 +282,8 @@ VITE_API_URL=http://localhost:5000/api
    NODE_ENV=production
    MONGODB_URI=your-production-mongodb-uri
    JWT_SECRET=your-production-jwt-secret
+   STRIPE_SECRET_KEY=sk_live_your_stripe_live_secret_key
+   STRIPE_WEBHOOK_SECRET=whsec_your_stripe_live_webhook_secret
    ```
 
 3. **Start the production server**
@@ -246,6 +335,7 @@ If you encounter any issues or have questions:
 - **Node.js** - Backend runtime
 - **Express** - Web framework
 - **MongoDB** - Database
+- **Stripe** - Payment processing
 - **Tailwind CSS** - Styling framework
 - **Vite** - Build tool
 

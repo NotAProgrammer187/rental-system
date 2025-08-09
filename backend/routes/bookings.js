@@ -5,6 +5,22 @@ const Booking = require('../models/Booking');
 const Rental = require('../models/Rental');
 const User = require('../models/User');
 
+// Utility to expand a date range into an array of YYYY-MM-DD strings (check-in inclusive, check-out exclusive)
+function expandDateRange(startDate, endDate) {
+  const dates = [];
+  const current = new Date(startDate);
+  const end = new Date(endDate);
+  // normalize to midnight UTC for stable string output
+  while (current < end) {
+    const y = current.getUTCFullYear();
+    const m = (current.getUTCMonth() + 1).toString().padStart(2, '0');
+    const d = current.getUTCDate().toString().padStart(2, '0');
+    dates.push(`${y}-${m}-${d}`);
+    current.setUTCDate(current.getUTCDate() + 1);
+  }
+  return dates;
+}
+
 // GET /api/bookings - Get user's bookings
 router.get('/', auth, async (req, res) => {
   try {
@@ -36,6 +52,31 @@ router.get('/', auth, async (req, res) => {
   } catch (error) {
     console.error('Error fetching bookings:', error);
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// GET /api/bookings/rental/:rentalId/paid-dates - Dates blocked by paid bookings for a rental
+router.get('/rental/:rentalId/paid-dates', async (req, res) => {
+  try {
+    const { rentalId } = req.params;
+    // only consider bookings that are actually paid
+    const bookings = await Booking.find({
+      property: rentalId,
+      'payment.status': 'paid'
+    }).select('checkIn checkOut');
+
+    const disabledDatesSet = new Set();
+    bookings.forEach(b => {
+      expandDateRange(b.checkIn, b.checkOut).forEach(ds => disabledDatesSet.add(ds));
+    });
+
+    res.json({
+      success: true,
+      dates: Array.from(disabledDatesSet)
+    });
+  } catch (error) {
+    console.error('Error fetching paid dates:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 });
 
@@ -152,7 +193,7 @@ router.post('/', auth, async (req, res) => {
       });
     }
 
-    // Check availability
+    // Check availability (only block on confirmed/active stays which correspond to paid)
     const isAvailable = await Booking.checkAvailability(propertyId, checkInDate, checkOutDate);
     if (!isAvailable) {
       return res.status(400).json({ message: 'Rental is not available for the selected dates' });
@@ -160,9 +201,7 @@ router.post('/', auth, async (req, res) => {
 
     // Calculate pricing
     const basePrice = rental.price * nights;
-    const cleaningFee = 50; // Fixed cleaning fee
-    const serviceFee = (basePrice + cleaningFee) * 0.12; // 12% service fee
-    const totalAmount = basePrice + cleaningFee + serviceFee;
+    const totalAmount = basePrice;
 
     // Create booking
     const booking = new Booking({
@@ -174,8 +213,8 @@ router.post('/', auth, async (req, res) => {
       guests: typeof guests === 'string' ? JSON.parse(guests) : guests,
       pricing: {
         basePrice,
-        cleaningFee,
-        serviceFee,
+        cleaningFee: 0,
+        serviceFee: 0,
         securityDeposit: 0,
         taxes: 0,
         totalAmount,

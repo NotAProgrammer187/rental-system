@@ -130,13 +130,19 @@ const PropertyCard = ({ property, showHost = true }) => {
           </div>
         )}
 
-        {/* Action Button */}
-        <div className="mt-4">
+        {/* Action Buttons */}
+        <div className="mt-4 space-y-2">
           <Link
-            to={`/properties/${property._id}`}
-            className="block w-full text-center bg-primary-600 text-white py-2 px-4 rounded-xl font-medium hover:bg-primary-700 transition-colors"
+            to={`/rentals/${property._id}`}
+            className="block w-full text-center bg-gray-100 text-gray-700 py-2 px-4 rounded-xl font-medium hover:bg-gray-200 transition-colors"
           >
             View Details
+          </Link>
+          <Link
+            to={`/booking/${property._id}`}
+            className="block w-full text-center bg-primary-600 text-white py-2 px-4 rounded-xl font-medium hover:bg-primary-700 transition-colors"
+          >
+            Book Now
           </Link>
         </div>
       </div>
@@ -145,3 +151,5 @@ const PropertyCard = ({ property, showHost = true }) => {
 };
 
 export default PropertyCard;
+
+
