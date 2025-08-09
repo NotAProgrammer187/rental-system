@@ -65,12 +65,25 @@ const Navbar = () => {
             
             {user ? (
               <>
-                <Link 
-                  to="/create-rental" 
-                  className="btn-primary text-sm"
-                >
-                  List Your Property
-                </Link>
+                { (user.role === 'admin' || user.verificationStatus === 'approved') ? (
+                  <div className="flex items-center gap-3">
+                    <Link to="/host" className="text-sm text-gray-700 hover:text-primary-600">Dashboard</Link>
+                    <Link 
+                      to="/create-rental" 
+                      className="btn-primary text-sm"
+                    >
+                      List Your Property
+                    </Link>
+                  </div>
+                ) : (
+                  <Link 
+                    to="/verify-host"
+                    className="btn-secondary text-sm"
+                    title="You must be verified by an admin to list properties"
+                  >
+                    Become a Host
+                  </Link>
+                )}
                 
                 {/* User Menu */}
                 <div className="relative group">
@@ -95,6 +108,22 @@ const Navbar = () => {
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         Profile
+                      </Link>
+                      {user.role === 'admin' && (
+                        <Link 
+                          to="/admin/verifications" 
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          Admin: Verifications
+                        </Link>
+                      )}
+                      <Link 
+                        to="/verify-host" 
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Host Verification
                       </Link>
                       <Link 
                         to="/bookings" 
@@ -160,13 +189,24 @@ const Navbar = () => {
               
               {user ? (
                 <>
-                  <Link
-                    to="/create-rental"
-                    className="block px-3 py-2 rounded-xl text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    List Your Property
-                  </Link>
+                  {(user.role === 'admin' || user.verificationStatus === 'approved') ? (
+                    <Link
+                      to="/create-rental"
+                      className="block px-3 py-2 rounded-xl text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      List Your Property
+                    </Link>
+                  ) : (
+                    <Link
+                      to="/verify-host"
+                      className="block px-3 py-2 rounded-xl text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      title="You must be verified by an admin to list properties"
+                    >
+                      Become a Host
+                    </Link>
+                  )}
                   <Link
                     to="/profile"
                     className="block px-3 py-2 rounded-xl text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors"

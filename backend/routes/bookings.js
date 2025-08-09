@@ -70,6 +70,12 @@ router.get('/rental/:rentalId/paid-dates', async (req, res) => {
       expandDateRange(b.checkIn, b.checkOut).forEach(ds => disabledDatesSet.add(ds));
     });
 
+    // Include manually blocked dates on the rental
+    const rental = await Rental.findById(rentalId).select('blockedDates');
+    if (rental?.blockedDates?.length) {
+      rental.blockedDates.forEach(d => disabledDatesSet.add(d));
+    }
+
     res.json({
       success: true,
       dates: Array.from(disabledDatesSet)

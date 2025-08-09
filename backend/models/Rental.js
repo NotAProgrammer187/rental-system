@@ -70,6 +70,9 @@ const rentalSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
+  blockedDates: [{
+    type: String // store as 'YYYY-MM-DD'
+  }],
   createdAt: {
     type: Date,
     default: Date.now

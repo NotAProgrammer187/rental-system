@@ -3,6 +3,7 @@ const router = express.Router();
 const { auth } = require('../middleware/auth');
 const Rental = require('../models/Rental');
 const multer = require('multer');
+const mongoose = require('mongoose');
 
 // Configure multer for memory storage (to convert to Base64)
 const upload = multer({
@@ -101,6 +102,10 @@ router.get('/:id/image/:imageIndex', async (req, res) => {
 // Create new rental (protected route) with Base64 image storage
 router.post('/', auth, upload.array('images', 10), async (req, res) => {
   try {
+    // Enforce host verification
+    if (req.user.role !== 'admin' && req.user.verificationStatus !== 'approved') {
+      return res.status(403).json({ message: 'You must be verified by an admin to list properties' });
+    }
     const { title, description, price, location, bedrooms, bathrooms, squareFeet, propertyType } = req.body;
     
     // Validate required fields

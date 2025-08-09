@@ -32,6 +32,26 @@ const userSchema = new mongoose.Schema({
     enum: ['user', 'host', 'admin'],
     default: 'user'
   },
+  // Host verification workflow
+  verificationStatus: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected']
+  },
+  verificationReason: {
+    type: String,
+    default: null
+  },
+  verificationSubmittedAt: Date,
+  verificationReviewedAt: Date,
+  verificationReviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
+  verificationLog: [
+    {
+      action: { type: String, enum: ['submitted', 'approved', 'rejected', 'resubmitted'] },
+      admin: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      reason: String,
+      at: { type: Date, default: Date.now }
+    }
+  ],
   isVerified: {
     type: Boolean,
     default: false

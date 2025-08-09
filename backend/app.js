@@ -12,7 +12,12 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve uploaded files statically (for legacy images)
+// Block public access to verification uploads
+app.use('/uploads/verification', (req, res) => {
+  return res.status(403).json({ message: 'Access denied' });
+});
+
+// Serve uploaded files statically (for legacy images), excluding verification handled above
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes

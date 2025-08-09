@@ -2,7 +2,9 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import { AuthProvider } from './context/AuthContext';
+import { ToastProvider } from './context/ToastContext';
 import PrivateRoute from './components/PrivateRoute';
+import HostRoute from './components/HostRoute';
 import PublicRoute from './components/PublicRoute';
 
 // Lazy load components for better performance
@@ -17,6 +19,9 @@ const MyBookings = lazy(() => import('./pages/MyBookings'));
 const BookingDetail = lazy(() => import('./pages/BookingDetail'));
 const BookingPage = lazy(() => import('./pages/BookingPage'));
 const CalendarDemo = lazy(() => import('./pages/CalendarDemo'));
+const VerifyHost = lazy(() => import('./pages/VerifyHost'));
+const AdminVerifications = lazy(() => import('./pages/AdminVerifications'));
+const HostDashboard = lazy(() => import('./pages/HostDashboard'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -28,6 +33,7 @@ const LoadingSpinner = () => (
 function App() {
   return (
     <AuthProvider>
+      <ToastProvider>
       <Router>
         <div className="App min-h-screen bg-gray-50">
           <Navbar />
@@ -65,7 +71,33 @@ function App() {
                   path="/create-rental" 
                   element={
                     <PrivateRoute>
-                      <CreateRental />
+                      <HostRoute>
+                        <CreateRental />
+                      </HostRoute>
+                    </PrivateRoute>
+                  } 
+                />
+                <Route 
+                  path="/verify-host" 
+                  element={
+                    <PrivateRoute>
+                      <VerifyHost />
+                    </PrivateRoute>
+                  } 
+                />
+                <Route 
+                  path="/host" 
+                  element={
+                    <PrivateRoute>
+                      <HostDashboard />
+                    </PrivateRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin/verifications" 
+                  element={
+                    <PrivateRoute requireAdmin>
+                      <AdminVerifications />
                     </PrivateRoute>
                   } 
                 />
@@ -99,6 +131,7 @@ function App() {
           </main>
         </div>
       </Router>
+      </ToastProvider>
     </AuthProvider>
   );
 }

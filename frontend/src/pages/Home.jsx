@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 const Home = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -57,6 +58,8 @@ const Home = () => {
     }
   ];
 
+  const { user } = useContext(AuthContext);
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -97,12 +100,22 @@ const Home = () => {
             >
               Browse Properties
             </Link>
-            <Link
-              to="/create-rental"
-              className="btn-secondary text-lg px-8 py-4 border-white text-white hover:bg-white hover:text-gray-900"
-            >
-              List Your Property
-            </Link>
+            {user && (user.role === 'admin' || user.verificationStatus === 'approved') ? (
+              <Link
+                to="/create-rental"
+                className="btn-secondary text-lg px-8 py-4 border-white text-white hover:bg-white hover:text-gray-900"
+              >
+                List Your Property
+              </Link>
+            ) : (
+              <Link
+                to="/verify-host"
+                className="btn-secondary text-lg px-8 py-4 border-white text-white hover:bg-white hover:text-gray-900"
+                title="You must be verified by an admin to list properties"
+              >
+                Become a Host
+              </Link>
+            )}
           </div>
         </div>
 

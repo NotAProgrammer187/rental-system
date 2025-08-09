@@ -20,7 +20,8 @@ router.post('/register', async (req, res) => {
     user = new User({
       name,
       email,
-      password
+      password,
+      verificationStatus: 'pending'
     });
 
     await user.save();
@@ -37,7 +38,10 @@ router.post('/register', async (req, res) => {
       user: { 
         id: user._id, 
         name: user.name, 
-        email: user.email 
+        email: user.email,
+        role: user.role,
+        verificationStatus: user.verificationStatus,
+        verificationReason: user.verificationReason
       } 
     });
   } catch (error) {
@@ -75,7 +79,10 @@ router.post('/login', async (req, res) => {
       user: { 
         id: user._id, 
         name: user.name, 
-        email: user.email 
+        email: user.email,
+        role: user.role,
+        verificationStatus: user.verificationStatus,
+        verificationReason: user.verificationReason
       } 
     });
   } catch (error) {
@@ -92,7 +99,10 @@ router.get('/me', auth, async (req, res) => {
     res.json({ 
       id: user._id, 
       name: user.name, 
-      email: user.email 
+      email: user.email,
+      role: user.role,
+      verificationStatus: user.verificationStatus,
+      verificationReason: user.verificationReason
     });
   } catch (error) {
     console.error(error);

@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
 
-const PrivateRoute = ({ children, requireAdmin = false }) => {
+const HostRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
+  const { showToast } = useToast();
 
-  // Show loading spinner while checking authentication
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -19,12 +20,15 @@ const PrivateRoute = ({ children, requireAdmin = false }) => {
 
   if (!user) return <Navigate to="/login" replace />;
 
-  if (requireAdmin && user.role !== 'admin') {
-    return <Navigate to="/" replace />;
+  const isAllowed = user.role === 'admin' || user.verificationStatus === 'approved';
+  if (!isAllowed) {
+    showToast({ type: 'warning', message: 'You must be verified by an admin to list properties.' });
+    return <Navigate to="/verify-host" replace />;
   }
 
   return children;
 };
 
-export default PrivateRoute;
+export default HostRoute;
+
 

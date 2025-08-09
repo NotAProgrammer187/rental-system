@@ -208,9 +208,14 @@ router.get('/:id', async (req, res) => {
 // POST /api/properties - Create new property (host only)
 router.post('/', auth, upload.array('images', 10), async (req, res) => {
   try {
-    // Check if user is a host
-    if (req.user.role !== 'host' && req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'Only hosts can create properties' });
+    // Enforce host verification
+    if (req.user.role !== 'admin') {
+      if (req.user.role !== 'host') {
+        return res.status(403).json({ message: 'Only hosts can create properties' });
+      }
+      if (req.user.verificationStatus !== 'approved') {
+        return res.status(403).json({ message: 'You must be verified by an admin to create properties' });
+      }
     }
 
     const {
