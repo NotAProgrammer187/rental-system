@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import api, { getImageUrl } from '../services/api';
+import ReviewForm from '../components/ReviewForm';
 
 const BookingDetail = () => {
   const { id } = useParams();
@@ -10,12 +11,17 @@ const BookingDetail = () => {
   const [booking, setBooking] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [myReviewTypes, setMyReviewTypes] = useState([]);
 
   useEffect(() => {
     const fetchBooking = async () => {
       try {
         const response = await api.get(`/bookings/${id}`);
         setBooking(response.data);
+        try {
+          const mine = await api.get(`/reviews/booking/${id}/me`);
+          setMyReviewTypes((mine.data?.reviews || []).map(r => r.revieweeType));
+        } catch (_) { /* noop */ }
       } catch (error) {
         setError('Failed to fetch booking details');
         console.error('Error fetching booking:', error);
@@ -303,6 +309,30 @@ const BookingDetail = () => {
                     <p className="font-medium text-gray-900">{booking.host.name}</p>
                     <p className="text-gray-600">{booking.host.email}</p>
                   </div>
+                </div>
+              </div>
+            )}
+
+            {/* Reviews */}
+            {(new Date(booking.checkOut) <= new Date() || booking.status === 'completed') && (
+              <div className="mt-8 border-t border-gray-200 pt-8">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Leave a review</h2>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Guest reviews rental */}
+                  {booking.guest && user && booking.guest._id === user.id && !myReviewTypes.includes('rental') && (
+                    <div className="bg-gray-50 p-4 rounded-xl">
+                      <ReviewForm booking={booking} type="rental" onSubmitted={() => window.location.reload()} />
+                    </div>
+                  )}
+                  {/* Host reviews guest */}
+                  {booking.host && user && booking.host._id === user.id && !myReviewTypes.includes('user') && (
+                    <div className="bg-gray-50 p-4 rounded-xl">
+                      <ReviewForm booking={booking} type="guest" onSubmitted={() => window.location.reload()} />
+                    </div>
+                  )}
+                  {(myReviewTypes.includes('rental') || myReviewTypes.includes('user')) && (
+                    <p className="text-gray-600">Thanks! Your review is pending approval.</p>
+                  )}
                 </div>
               </div>
             )}

@@ -9,6 +9,7 @@ const paymentRoutes = require('./payments');
 const verificationRoutes = require('./verification');
 const hostRoutes = require('./host');
 const adminRoutes = require('./admin');
+const reviewRoutes = require('./reviews');
 
 // Use routes
 router.use('/auth', authRoutes);
@@ -18,6 +19,7 @@ router.use('/payments', paymentRoutes);
 router.use('/verification', verificationRoutes);
 router.use('/host', hostRoutes);
 router.use('/admin', adminRoutes);
+router.use('/reviews', reviewRoutes);
 
 // Health check route
 router.get('/health', (req, res) => {

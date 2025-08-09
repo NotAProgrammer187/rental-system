@@ -97,6 +97,9 @@ const HostDashboard = () => {
                       <button onClick={async () => { await api.put(`/bookings/${b._id}/cancel`, { reason: 'Declined by host' }); showToast({ type: 'warning', message: 'Booking declined' }); fetchBookings(); }} className="btn-secondary">Decline</button>
                     </>
                   )}
+                  {new Date(b.checkOut) <= new Date() && (
+                    <a href={`/bookings/${b._id}`} className="btn-secondary">Leave a review</a>
+                  )}
                 </div>
               </div>
             ))}

@@ -22,6 +22,7 @@ const CalendarDemo = lazy(() => import('./pages/CalendarDemo'));
 const VerifyHost = lazy(() => import('./pages/VerifyHost'));
 const AdminVerifications = lazy(() => import('./pages/AdminVerifications'));
 const HostDashboard = lazy(() => import('./pages/HostDashboard'));
+const AdminReviews = lazy(() => import('./pages/AdminReviews'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -98,6 +99,14 @@ function App() {
                   element={
                     <PrivateRoute requireAdmin>
                       <AdminVerifications />
+                    </PrivateRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin/reviews" 
+                  element={
+                    <PrivateRoute requireAdmin>
+                      <AdminReviews />
                     </PrivateRoute>
                   } 
                 />

@@ -14,6 +14,7 @@ const RentalDetail = () => {
   const [error, setError] = useState('');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showImageModal, setShowImageModal] = useState(false);
+  const [reviews, setReviews] = useState({ list: [], total: 0, page: 1 });
 
   const [disabledDates, setDisabledDates] = useState([]);
 
@@ -43,6 +44,13 @@ const RentalDetail = () => {
 
     fetchRental();
     fetchDisabledDates();
+    const fetchReviews = async () => {
+      try {
+        const r = await api.get(`/reviews/rental/${id}?limit=5`);
+        setReviews({ list: r.data.reviews || [], total: r.data.pagination?.totalItems || 0, page: 1 });
+      } catch (_) {}
+    };
+    fetchReviews();
   }, [id]);
 
   const handleDelete = async () => {
@@ -245,6 +253,54 @@ const RentalDetail = () => {
               <div className="border-t border-gray-200 pt-6">
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">About this property</h3>
                 <p className="text-gray-700 leading-relaxed">{rental.description}</p>
+              </div>
+
+              {/* Reviews Preview */}
+              <div className="border-t border-gray-200 pt-6 mt-6" id="reviews">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-xl font-semibold text-gray-900">Reviews {typeof rental.ratingAverage === 'number' && rental.reviewCount >= 0 ? `(${rental.reviewCount})` : ''}</h3>
+                  {typeof rental.ratingAverage === 'number' && rental.reviewCount > 0 && (
+                    <div className="flex items-center space-x-2">
+                      <svg className="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                      <span className="text-lg font-medium">{Number(rental.ratingAverage).toFixed(1)}</span>
+                    </div>
+                  )}
+                </div>
+                {reviews.list.length === 0 ? (
+                  <p className="text-gray-600">No reviews yet.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {reviews.list.map((rv) => (
+                      <div key={rv._id} className="p-4 bg-gray-50 rounded-xl">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2">
+                            <svg className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                            <span className="text-sm font-medium">{rv.rating.toFixed(1)}</span>
+                          </div>
+                          <span className="text-sm text-gray-500">{new Date(rv.createdAt).toLocaleDateString()}</span>
+                        </div>
+                        <p className="text-gray-700 mt-2">{rv.comment}</p>
+                        {rv.photos?.length > 0 && (
+                          <div className="mt-2 grid grid-cols-5 gap-2">
+                            {rv.photos.map((p, i) => (
+                              <img key={i} src={getImageUrl(p.path)} alt={p.originalName || 'review photo'} className="w-full h-20 object-cover rounded" />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                    {reviews.total > reviews.list.length && (
+                      <div className="text-right">
+                        <a href="#reviews" className="text-primary-600 hover:underline" onClick={async (e) => {
+                          e.preventDefault();
+                          const nextPage = reviews.page + 1;
+                          const r = await api.get(`/reviews/rental/${id}?limit=5&page=${nextPage}`);
+                          setReviews({ list: [...reviews.list, ...(r.data.reviews || [])], total: r.data.pagination?.totalItems || reviews.total, page: nextPage });
+                        }}>Load more</a>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               {rental.owner && (

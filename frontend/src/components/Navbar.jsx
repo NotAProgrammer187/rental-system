@@ -118,6 +118,15 @@ const Navbar = () => {
                           Admin: Verifications
                         </Link>
                       )}
+                      {user.role === 'admin' && (
+                        <Link 
+                          to="/admin/reviews" 
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          Admin: Reviews
+                        </Link>
+                      )}
                       <Link 
                         to="/verify-host" 
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"

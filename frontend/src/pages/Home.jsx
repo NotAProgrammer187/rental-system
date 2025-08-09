@@ -103,14 +103,14 @@ const Home = () => {
             {user && (user.role === 'admin' || user.verificationStatus === 'approved') ? (
               <Link
                 to="/create-rental"
-                className="btn-secondary text-lg px-8 py-4 border-white text-white hover:bg-white hover:text-gray-900"
+                className="text-lg px-8 py-4 rounded-xl font-medium border-2 border-white text-white bg-transparent hover:bg-white hover:text-gray-900 focus:ring-4 focus:ring-white/50 transition-all duration-200"
               >
                 List Your Property
               </Link>
             ) : (
               <Link
                 to="/verify-host"
-                className="btn-secondary text-lg px-8 py-4 border-white text-white hover:bg-white hover:text-gray-900"
+                className="text-lg px-8 py-4 rounded-xl font-medium border-2 border-white text-white bg-transparent hover:bg-white hover:text-gray-900 focus:ring-4 focus:ring-white/50 transition-all duration-200"
                 title="You must be verified by an admin to list properties"
               >
                 Become a Host

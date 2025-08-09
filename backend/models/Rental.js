@@ -89,6 +89,12 @@ rentalSchema.pre('save', function(next) {
   next();
 });
 
+// Aggregate rating fields (computed from approved reviews)
+rentalSchema.add({
+  ratingAverage: { type: Number, default: 0, min: 0, max: 5 },
+  reviewCount: { type: Number, default: 0 }
+});
+
 module.exports = mongoose.model('Rental', rentalSchema);
 
 
