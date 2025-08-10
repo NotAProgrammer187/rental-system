@@ -6,6 +6,7 @@ import {
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js';
+import api from '../services/api';
 
 // Load Stripe (you'll need to add your publishable key to environment variables)
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
@@ -19,15 +20,8 @@ const PaymentForm = ({ booking, onSuccess, onCancel }) => {
     const createPaymentIntent = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/payments/create-payment-intent/${booking._id}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-
-        const data = await response.json();
+        const response = await api.post(`/payments/create-payment-intent/${booking._id}`);
+        const data = response.data;
         
         if (data.success) {
           setClientSecret(data.clientSecret);
@@ -119,18 +113,10 @@ const PaymentFormContent = ({ booking, onSuccess, onCancel }) => {
       setLoading(false);
     } else if (paymentIntent && paymentIntent.status === 'succeeded') {
       try {
-        const response = await fetch('/api/payments/confirm-payment', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          body: JSON.stringify({
-            paymentIntentId: paymentIntent.id
-          })
+        const response = await api.post('/payments/confirm-payment', {
+          paymentIntentId: paymentIntent.id
         });
-
-        const data = await response.json();
+        const data = response.data;
         
         if (data.success) {
           onSuccess(data.payment);

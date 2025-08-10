@@ -37,7 +37,7 @@ const upload = multer({
 });
 
 // GET /api/properties - Get all properties with filters
-router.get('/', async (req, res) => {
+router.get('/', auth, async (req, res) => {
   try {
     const {
       page = 1,
@@ -61,6 +61,11 @@ router.get('/', async (req, res) => {
 
     // Build filter object
     const filter = { status: 'active' };
+
+    // Owner filter (for hosts to see their own properties)
+    if (req.query.owner === 'me' && req.user) {
+      filter.host = req.user._id;
+    }
 
     // Search filter
     if (search) {

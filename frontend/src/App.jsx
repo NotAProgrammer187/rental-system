@@ -24,6 +24,7 @@ const AdminVerifications = lazy(() => import('./pages/AdminVerifications'));
 const HostDashboard = lazy(() => import('./pages/HostDashboard'));
 const AdminReviews = lazy(() => import('./pages/AdminReviews'));
 const Messages = lazy(() => import('./pages/Messages'));
+const AnalyticsDashboard = lazy(() => import('./pages/AnalyticsDashboard'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -108,6 +109,14 @@ function App() {
                   element={
                     <PrivateRoute requireAdmin>
                       <AdminReviews />
+                    </PrivateRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin/analytics" 
+                  element={
+                    <PrivateRoute requireAdmin>
+                      <AnalyticsDashboard />
                     </PrivateRoute>
                   } 
                 />

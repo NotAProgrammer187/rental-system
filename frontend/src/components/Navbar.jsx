@@ -190,6 +190,15 @@ const Navbar = () => {
                           Admin: Reviews
                         </Link>
                       )}
+                      {user.role === 'admin' && (
+                        <Link 
+                          to="/admin/analytics" 
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          Analytics Dashboard
+                        </Link>
+                      )}
                       <Link 
                         to="/verify-host" 
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
@@ -286,6 +295,15 @@ const Navbar = () => {
                   >
                     Profile
                   </Link>
+                  {user.role === 'admin' && (
+                    <Link
+                      to="/admin/analytics"
+                      className="block px-3 py-2 rounded-xl text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Analytics Dashboard
+                    </Link>
+                  )}
                   <Link
                     to="/bookings"
                     className="block px-3 py-2 rounded-xl text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 transition-colors"

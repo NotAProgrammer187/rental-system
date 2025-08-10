@@ -12,6 +12,8 @@ const adminRoutes = require('./admin');
 const reviewRoutes = require('./reviews');
 const messageRoutes = require('./messages');
 const messageTemplateRoutes = require('./messageTemplates');
+const analyticsRoutes = require('./analytics');
+const propertiesRoutes = require('./properties');
 
 // Use routes
 router.use('/auth', authRoutes);
@@ -24,6 +26,8 @@ router.use('/admin', adminRoutes);
 router.use('/reviews', reviewRoutes);
 router.use('/messages', messageRoutes);
 router.use('/message-templates', messageTemplateRoutes);
+router.use('/analytics', analyticsRoutes);
+router.use('/properties', propertiesRoutes);
 
 // Health check route
 router.get('/health', (req, res) => {
