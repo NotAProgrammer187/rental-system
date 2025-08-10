@@ -85,7 +85,7 @@ router.get('/:id/image/:imageIndex', async (req, res) => {
       // Legacy string format - redirect to the old uploads path
       // This handles existing rentals that still have file paths
       const isDevelopment = process.env.NODE_ENV === 'development';
-      const baseURL = isDevelopment ? 'http://localhost:5000' : req.get('host');
+      const baseURL = isDevelopment ? (process.env.API_URL || req.get('host')) : req.get('host');
       const imageUrl = `${baseURL}${image}`;
       
       // Redirect to the actual image file

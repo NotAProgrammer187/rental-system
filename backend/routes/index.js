@@ -10,6 +10,8 @@ const verificationRoutes = require('./verification');
 const hostRoutes = require('./host');
 const adminRoutes = require('./admin');
 const reviewRoutes = require('./reviews');
+const messageRoutes = require('./messages');
+const messageTemplateRoutes = require('./messageTemplates');
 
 // Use routes
 router.use('/auth', authRoutes);
@@ -20,6 +22,8 @@ router.use('/verification', verificationRoutes);
 router.use('/host', hostRoutes);
 router.use('/admin', adminRoutes);
 router.use('/reviews', reviewRoutes);
+router.use('/messages', messageRoutes);
+router.use('/message-templates', messageTemplateRoutes);
 
 // Health check route
 router.get('/health', (req, res) => {

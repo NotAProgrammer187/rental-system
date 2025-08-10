@@ -39,7 +39,7 @@ const ReviewForm = ({ booking, type = 'rental', onSubmitted }) => {
       files.forEach((f) => form.append('photos', f));
 
       const endpoint = type === 'rental' ? `/reviews/booking/${booking._id}/rental` : `/reviews/booking/${booking._id}/guest`;
-      const res = await fetch((import.meta.env.VITE_API_URL || 'http://localhost:5000/api') + endpoint, {
+      const res = await fetch((import.meta.env.VITE_API_URL || window.location.origin + '/api') + endpoint, {
         method: 'POST',
         headers: { Authorization: `Bearer ${localStorage.getItem('token') || ''}` },
         body: form

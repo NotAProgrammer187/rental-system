@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getImageUrl } from '../services/api';
+import ContactHostButton from './messaging/ContactHostButton';
 
 const PropertyCard = ({ property, showHost = true }) => {
   const formatPrice = (price) => {
@@ -138,12 +139,18 @@ const PropertyCard = ({ property, showHost = true }) => {
           >
             View Details
           </Link>
-          <Link
-            to={`/booking/${property._id}`}
-            className="block w-full text-center bg-primary-600 text-white py-2 px-4 rounded-xl font-medium hover:bg-primary-700 transition-colors"
-          >
-            Book Now
-          </Link>
+          <div className="grid grid-cols-2 gap-2">
+            <Link
+              to={`/booking/${property._id}`}
+              className="block w-full text-center bg-primary-600 text-white py-2 px-4 rounded-xl font-medium hover:bg-primary-700 transition-colors text-sm"
+            >
+              Book Now
+            </Link>
+            <ContactHostButton 
+              property={property} 
+              className="w-full text-sm py-2 px-2"
+            />
+          </div>
         </div>
       </div>
     </div>

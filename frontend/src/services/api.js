@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -29,22 +29,21 @@ export const getImageUrl = (imageData, rentalId, imageIndex) => {
   
   // If it's a rental ID and image index (for the new MongoDB storage)
   if (rentalId && typeof imageIndex === 'number') {
-    const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    const baseURL = isDevelopment ? 'http://localhost:5000' : window.location.origin;
+    const baseURL = import.meta.env.VITE_API_URL?.replace('/api', '') || window.location.origin;
     return `${baseURL}/api/rentals/${rentalId}/image/${imageIndex}`;
   }
   
   // If it's a relative path (starts with /), construct the full URL (legacy support)
   if (typeof imageData === 'string' && imageData.startsWith('/')) {
     const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    const baseURL = isDevelopment ? 'http://localhost:5000' : window.location.origin;
+    const baseURL = isDevelopment ? (import.meta.env.VITE_API_URL?.replace('/api', '') || window.location.origin) : window.location.origin;
     return `${baseURL}${imageData}`;
   }
   
   // If it's just a filename, construct the full URL (legacy support)
   if (typeof imageData === 'string') {
-  const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  const baseURL = isDevelopment ? 'http://localhost:5000' : window.location.origin;
+    const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const baseURL = isDevelopment ? (import.meta.env.VITE_API_URL?.replace('/api', '') || window.location.origin) : window.location.origin;
     return `${baseURL}/uploads/${imageData}`;
   }
   

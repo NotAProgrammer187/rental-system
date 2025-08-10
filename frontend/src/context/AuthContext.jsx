@@ -1,7 +1,16 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import api from '../services/api';
+import websocketService from '../services/websocketService';
 
 export const AuthContext = createContext();
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -49,6 +58,8 @@ export const AuthProvider = ({ children }) => {
             setUser(userData);
             // Update localStorage with fresh user data
             localStorage.setItem('user', JSON.stringify(userData));
+            // Connect to WebSocket for real-time features
+            websocketService.connect(token);
           } else {
             setUser(null);
           }
@@ -77,6 +88,8 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(user));
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setUser(user);
+      // Connect to WebSocket for real-time features
+      websocketService.connect(token);
       return { success: true };
     } catch (error) {
       return { success: false, message: error.response?.data?.message || 'Login failed' };
@@ -92,6 +105,8 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(user));
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setUser(user);
+      // Connect to WebSocket for real-time features
+      websocketService.connect(token);
       return { success: true };
     } catch (error) {
       return { success: false, message: error.response?.data?.message || 'Registration failed' };
@@ -102,6 +117,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     delete api.defaults.headers.common['Authorization'];
+    // Disconnect from WebSocket
+    websocketService.disconnect();
     setUser(null);
   };
 

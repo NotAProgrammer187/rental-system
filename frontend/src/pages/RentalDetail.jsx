@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import api, { getImageUrl } from '../services/api';
+import ContactHostButton from '../components/messaging/ContactHostButton';
 
 
 const RentalDetail = () => {
@@ -353,21 +354,30 @@ const RentalDetail = () => {
                   </div>
                 </div>
 
-                {rental.isAvailable ? (
-                  <button
-                    onClick={handleBookNow}
-                    className="w-full btn-primary text-lg py-4"
-                  >
-                    {user ? 'Book Now' : 'Sign in to Book'}
-                  </button>
-                ) : (
-                  <button
-                    disabled
-                    className="w-full bg-gray-300 text-gray-500 px-6 py-4 rounded-xl font-medium cursor-not-allowed"
-                  >
-                    Not Available
-                  </button>
-                )}
+                <div className="space-y-3">
+                  {rental.isAvailable ? (
+                    <button
+                      onClick={handleBookNow}
+                      className="w-full btn-primary text-lg py-4"
+                    >
+                      {user ? 'Book Now' : 'Sign in to Book'}
+                    </button>
+                  ) : (
+                    <button
+                      disabled
+                      className="w-full bg-gray-300 text-gray-500 px-6 py-4 rounded-xl font-medium cursor-not-allowed"
+                    >
+                      Not Available
+                    </button>
+                  )}
+                  
+                  {!isOwner && (
+                    <ContactHostButton 
+                      property={rental} 
+                      className="w-full py-3"
+                    />
+                  )}
+                </div>
 
                 <div className="mt-6 space-y-4">
                   <div className="flex items-center justify-between py-2 border-b border-gray-200">

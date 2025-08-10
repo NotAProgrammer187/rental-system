@@ -23,6 +23,7 @@ const VerifyHost = lazy(() => import('./pages/VerifyHost'));
 const AdminVerifications = lazy(() => import('./pages/AdminVerifications'));
 const HostDashboard = lazy(() => import('./pages/HostDashboard'));
 const AdminReviews = lazy(() => import('./pages/AdminReviews'));
+const Messages = lazy(() => import('./pages/Messages'));
 
 // Loading component
 const LoadingSpinner = () => (
@@ -135,6 +136,14 @@ function App() {
                   } 
                 />
                 <Route path="/calendar-demo" element={<CalendarDemo />} />
+                <Route 
+                  path="/messages" 
+                  element={
+                    <PrivateRoute>
+                      <Messages />
+                    </PrivateRoute>
+                  } 
+                />
               </Routes>
             </Suspense>
           </main>

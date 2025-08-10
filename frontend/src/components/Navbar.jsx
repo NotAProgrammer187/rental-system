@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import messageService from '../services/messageService';
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -8,6 +9,7 @@ const Navbar = () => {
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +19,28 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Load unread message count for authenticated users
+  useEffect(() => {
+    if (user) {
+      const loadUnreadCount = async () => {
+        try {
+          const response = await messageService.getUnreadCount();
+          setUnreadCount(response.data?.unreadCount || 0);
+        } catch (error) {
+          console.error('Error loading unread count:', error);
+        }
+      };
+
+      loadUnreadCount();
+      
+      // Poll for updates every 30 seconds
+      const interval = setInterval(loadUnreadCount, 30000);
+      return () => clearInterval(interval);
+    } else {
+      setUnreadCount(0);
+    }
+  }, [user]);
 
   const handleLogout = () => {
     logout();
@@ -85,6 +109,31 @@ const Navbar = () => {
                   </Link>
                 )}
                 
+                {/* Messages Link */}
+                <Link 
+                  to="/messages" 
+                  className={`relative px-3 py-2 text-sm font-medium transition-colors ${
+                    isActive('/messages') 
+                      ? 'text-primary-600' 
+                      : 'text-gray-700 hover:text-primary-600'
+                  }`}
+                >
+                  <div className="flex items-center space-x-1">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    <span>Messages</span>
+                    {unreadCount > 0 && (
+                      <span className="inline-flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-red-500 rounded-full">
+                        {unreadCount > 9 ? '9+' : unreadCount}
+                      </span>
+                    )}
+                  </div>
+                  {isActive('/messages') && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary-600 rounded-full"></div>
+                  )}
+                </Link>
+                
                 {/* User Menu */}
                 <div className="relative group">
                   <button className="flex items-center space-x-2 p-2 rounded-xl hover:bg-gray-100 transition-colors">
@@ -108,6 +157,20 @@ const Navbar = () => {
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         Profile
+                      </Link>
+                      <Link 
+                        to="/messages" 
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span>Messages</span>
+                          {unreadCount > 0 && (
+                            <span className="inline-flex items-center justify-center w-5 h-5 text-xs font-medium text-white bg-red-500 rounded-full">
+                              {unreadCount > 9 ? '9+' : unreadCount}
+                            </span>
+                          )}
+                        </div>
                       </Link>
                       {user.role === 'admin' && (
                         <Link 

@@ -1,8 +1,13 @@
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
+  if (!process.env.MONGODB_URI) {
+    console.error('🚨 SECURITY ERROR: MONGODB_URI environment variable is required!');
+    process.exit(1);
+  }
+  
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/rental-system', {
+    const conn = await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

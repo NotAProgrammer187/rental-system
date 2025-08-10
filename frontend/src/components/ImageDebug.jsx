@@ -7,7 +7,7 @@ const ImageDebug = ({ imagePath, alt, className, ...props }) => {
   console.log('ImageDebug:', {
     originalPath: imagePath,
     fullUrl: fullUrl,
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000'
+          baseURL: import.meta.env.VITE_API_URL || window.location.origin
   });
 
   return (
